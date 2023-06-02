@@ -1,4 +1,3 @@
-const image = document.getElementById('hidden');
 const canvas = document.getElementById('myCanvas');
 const c = canvas.getContext('2d');
 
@@ -7,12 +6,22 @@ const columns = canvas.width / size;
 const rows = canvas.height / size;
 const mine = 'mine';
 const mineCount = 20;
+const images = {
+  'hidden': document.getElementById('hidden'),
+  'mine': document.getElementById('mine'),
+  '0': document.getElementById('field-0'),
+  '1': document.getElementById('field-1'),
+  '2': document.getElementById('field-2'),
+  '3': document.getElementById('field-3'),
+  '4': document.getElementById('field-4'),
+  '5': document.getElementById('field-5'),
+  '6': document.getElementById('field-6'),
+  '7': document.getElementById('field-7'),
+  '8': document.getElementById('field-8'),
+};
 
 let map = createMap();
 placeMines(map, mineCount);
-
-console.log(map);
-
 drawMap();
 
 function placeMines(map, mineCount) {
@@ -40,13 +49,15 @@ function createMap() {
 }
 
 function drawMap() {
-  for (let i = 0; i < columns; i++) {
-    for (let j = 0; j < rows; j++) {
-      drawImage(i * size, j * size);
+  for (let rowI = 0; rowI < rows; rowI++) {
+    for (let colI = 0; colI < columns; colI++) {
+      let field = map[rowI][colI];
+      let image = images[field];
+      drawImage(image, colI * size, rowI * size);
     }
   }
 }
 
-function drawImage(x, y) {
+function drawImage(image, x, y) {
   c.drawImage(image, x, y, size, size);
 }
