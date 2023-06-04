@@ -24,6 +24,17 @@ let map = createMap();
 placeMines(map, mineCount);
 drawMap();
 
+function calculateFiledValues(map) {
+  for (let rowI = 0; rowI < rows; rowI++) {
+    for (let colI = 0; colI < columns; colI++) {
+      let field = map[rowI][colI];
+      if (field !== mine) {
+        let neighbourCoordinates = findNeighbourFields(map, rowI, colI);
+      }
+    }
+  }
+}
+
 function placeMines(map, mineCount) {
   let mines = 0;
   while (mines < mineCount) {
