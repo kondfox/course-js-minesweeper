@@ -35,6 +35,21 @@ function calculateFiledValues(map) {
   }
 }
 
+function findNeighbourFields(map, rowI, colI) {
+  let neighbourCoordinates = [];
+  for (let row = rowI - 1; row <= rowI + 1; row++) {
+    for (let col = colI - 1; col <= colI + 1; col++) {
+      if (row >= 0 && row < rows && col >= 0 && col < columns) {
+        if (row !== rowI || col !== colI) {
+          neighbourCoordinates.push({row: row, col: col});
+        }
+      }
+    }
+  }
+  return neighbourCoordinates;
+}
+
+
 function placeMines(map, mineCount) {
   let mines = 0;
   while (mines < mineCount) {
