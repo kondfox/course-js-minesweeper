@@ -20,7 +20,8 @@ const images = {
   '8': document.getElementById('field-8'),
 };
 
-let map = createMap();
+let map = createMap(); // [[{value: 0, isExplored: false}, {value: 1, isExplored: true}, 'mine', 1, 0, ...], [...]]
+let exploredMap = []; // [[false, true, false, ...], [...]]
 placeMines(map, mineCount);
 calculateFieldValues(map);
 drawMap();
