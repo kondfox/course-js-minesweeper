@@ -20,8 +20,8 @@ const images = {
   '8': document.getElementById('field-8'),
 };
 
-let map = createMap(); // [[{value: 0, isExplored: false}, {value: 1, isExplored: true}, 'mine', 1, 0, ...], [...]]
-let exploredMap = []; // [[false, true, false, ...], [...]]
+let map = createMap();
+let exploredMap = createExploredMap(); // [[false, true, false, ...], [...]]
 placeMines(map, mineCount);
 calculateFieldValues(map);
 drawMap();
@@ -90,12 +90,28 @@ function createMap() {
   return map;
 }
 
+function createExploredMap() {
+  let exploredMap = [];
+  for (let j = 0; j < rows; j++) {
+    let row = [];
+    for (let i = 0; i < columns; i++) {
+      row[i] = false;
+    }
+    exploredMap[j] = row;
+  }
+  return exploredMap;
+}
+
 function drawMap() {
   for (let rowI = 0; rowI < rows; rowI++) {
     for (let colI = 0; colI < columns; colI++) {
-      let field = map[rowI][colI];
-      let image = images[field];
-      drawImage(image, colI * size, rowI * size);
+      if (exploredMap[rowI][colI] === false) {
+        drawImage(images.hidden, colI * size, rowI * size);
+      } else {
+        let field = map[rowI][colI];
+        let image = images[field];
+        drawImage(image, colI * size, rowI * size);
+      }
     }
   }
 }
