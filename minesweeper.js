@@ -1,5 +1,6 @@
 const canvas = document.getElementById('myCanvas');
 const c = canvas.getContext('2d');
+const actionButton = document.getElementById('action-button');
 
 const size = 50;
 const columns = canvas.width / size;
@@ -19,6 +20,12 @@ const images = {
   '7': document.getElementById('field-7'),
   '8': document.getElementById('field-8'),
 };
+const buttons = {
+  start: 'assets/button-start.png',
+  lost: 'assets/button-lost.png',
+  won: 'assets/button-won.png',
+}
+let isGameOver = false;
 
 let map = createMap();
 let exploredMap = createExploredMap(); // [[false, true, false, ...], [...]]
@@ -27,12 +34,17 @@ calculateFieldValues(map);
 drawMap();
 
 canvas.addEventListener('click', function(event) {
+  if (isGameOver) return;
   const x = event.offsetX;
   const y = event.offsetY;
   const col = Math.floor(x / size);
   const row = Math.floor(y / size);
   exploreField(row, col);
   drawMap();
+  if (map[row][col] === mine) {
+    isGameOver = true;
+    actionButton.src = buttons.lost;
+  }
 });
 
 function exploreField(row, col) {
