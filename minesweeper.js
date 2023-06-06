@@ -6,7 +6,7 @@ const size = 50;
 const columns = canvas.width / size;
 const rows = canvas.height / size;
 const mine = 'mine';
-const mineCount = 20;
+const mineCount = 30;
 const images = {
   'hidden': document.getElementById('hidden'),
   'mine': document.getElementById('mine'),
@@ -27,6 +27,7 @@ const buttons = {
 }
 let isGameOver = false;
 let isFirstClick = true;
+let exploredFields = 0;
 
 let map = createMap();
 let exploredMap = createExploredMap(); // [[false, true, false, ...], [...]]
@@ -48,11 +49,15 @@ canvas.addEventListener('click', function(event) {
   if (map[row][col] === mine) {
     isGameOver = true;
     actionButton.src = buttons.lost;
+  } else if (exploredFields === rows * columns - mineCount) {
+    isGameOver = true;
+    actionButton.src = buttons.won;
   }
 });
 
 function exploreField(row, col) {
   if (exploredMap[row][col] === false) {
+    exploredFields++;
     exploredMap[row][col] = true;
     if (map[row][col] === 0) {
       let neighbourCoordinates = findNeighbourFields(map, row, col);
