@@ -6,7 +6,7 @@ const size = 50;
 const columns = canvas.width / size;
 const rows = canvas.height / size;
 const mine = 'mine';
-const mineCount = 30;
+const mineCount = 10;
 const images = {
   'hidden': document.getElementById('hidden'),
   'mine': document.getElementById('mine'),
@@ -25,13 +25,13 @@ const buttons = {
   lost: 'assets/button-lost.png',
   won: 'assets/button-won.png',
 }
-let isGameOver = false;
-let isFirstClick = true;
-let exploredFields = 0;
+let isGameOver;
+let isFirstClick;
+let exploredFields;
+let map;
+let exploredMap;
 
-let map = createMap();
-let exploredMap = createExploredMap(); // [[false, true, false, ...], [...]]
-drawMap();
+initGame();
 
 canvas.addEventListener('click', function(event) {
   if (isGameOver) return;
@@ -54,6 +54,20 @@ canvas.addEventListener('click', function(event) {
     actionButton.src = buttons.won;
   }
 });
+
+actionButton.addEventListener('click', function() {
+  initGame();
+});
+
+function initGame() {
+  isGameOver = false;
+  isFirstClick = true;
+  exploredFields = 0;
+  map = createMap();
+  exploredMap = createExploredMap();
+  drawMap();
+  actionButton.src = buttons.start;
+}
 
 function exploreField(row, col) {
   if (exploredMap[row][col] === false) {
