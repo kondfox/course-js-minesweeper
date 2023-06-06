@@ -26,6 +26,28 @@ placeMines(map, mineCount);
 calculateFieldValues(map);
 drawMap();
 
+canvas.addEventListener('click', function(event) {
+  const x = event.offsetX;
+  const y = event.offsetY;
+  const col = Math.floor(x / size);
+  const row = Math.floor(y / size);
+  exploreField(row, col);
+  drawMap();
+});
+
+function exploreField(row, col) {
+  if (exploredMap[row][col] === false) {
+    exploredMap[row][col] = true;
+    if (map[row][col] === 0) {
+      let neighbourCoordinates = findNeighbourFields(map, row, col);
+      for (let i = 0; i < neighbourCoordinates.length; i++) {
+        let coordinate = neighbourCoordinates[i]; // {row: 7, col: 1}
+        exploreField(coordinate.row, coordinate.col); // rekurzió
+      }
+    }
+  }
+}
+
 function calculateFieldValues(map) {
   for (let rowI = 0; rowI < rows; rowI++) {
     for (let colI = 0; colI < columns; colI++) {
