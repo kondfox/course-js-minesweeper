@@ -10,6 +10,7 @@ const mineCount = 10;
 const images = {
   'hidden': document.getElementById('hidden'),
   'mine': document.getElementById('mine'),
+  'flag': document.getElementById('flag'),
   '0': document.getElementById('field-0'),
   '1': document.getElementById('field-1'),
   '2': document.getElementById('field-2'),
@@ -28,6 +29,7 @@ const buttons = {
 let isGameOver;
 let isFirstClick;
 let exploredFields;
+let flagMap;
 let map;
 let exploredMap;
 
@@ -55,6 +57,17 @@ canvas.addEventListener('click', function(event) {
   }
 });
 
+canvas.addEventListener('contextmenu', function(event) {
+  event.preventDefault();
+  const x = event.offsetX;
+  const y = event.offsetY;
+  const col = Math.floor(x / size);
+  const row = Math.floor(y / size);
+  if (exploredMap[row][col]) return;
+  flagMap[row][col] = !flagMap[row][col];
+  drawMap();
+});
+
 actionButton.addEventListener('click', function() {
   initGame();
 });
@@ -64,7 +77,8 @@ function initGame() {
   isFirstClick = true;
   exploredFields = 0;
   map = createMap();
-  exploredMap = createExploredMap();
+  exploredMap = createBooleanMap();
+  flagMap = createBooleanMap();
   drawMap();
   actionButton.src = buttons.start;
 }
@@ -147,7 +161,7 @@ function createMap() {
   return map;
 }
 
-function createExploredMap() {
+function createBooleanMap() {
   let exploredMap = [];
   for (let j = 0; j < rows; j++) {
     let row = [];
@@ -162,8 +176,11 @@ function createExploredMap() {
 function drawMap() {
   for (let rowI = 0; rowI < rows; rowI++) {
     for (let colI = 0; colI < columns; colI++) {
-      if (exploredMap[rowI][colI] === false) {
+      if (!exploredMap[rowI][colI]) {
         drawImage(images.hidden, colI * size, rowI * size);
+        if (flagMap[rowI][colI]) {
+          drawImage(images.flag, colI * size, rowI * size);
+        }
       } else {
         let field = map[rowI][colI];
         let image = images[field];
