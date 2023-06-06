@@ -26,11 +26,10 @@ const buttons = {
   won: 'assets/button-won.png',
 }
 let isGameOver = false;
+let isFirstClick = true;
 
 let map = createMap();
 let exploredMap = createExploredMap(); // [[false, true, false, ...], [...]]
-placeMines(map, mineCount);
-calculateFieldValues(map);
 drawMap();
 
 canvas.addEventListener('click', function(event) {
@@ -39,6 +38,11 @@ canvas.addEventListener('click', function(event) {
   const y = event.offsetY;
   const col = Math.floor(x / size);
   const row = Math.floor(y / size);
+  if (isFirstClick) {
+    placeMines(map, mineCount, row, col);
+    calculateFieldValues(map);
+    isFirstClick = false;
+  }
   exploreField(row, col);
   drawMap();
   if (map[row][col] === mine) {
@@ -100,12 +104,12 @@ function findNeighbourFields(map, rowI, colI) {
 }
 
 
-function placeMines(map, mineCount) {
+function placeMines(map, mineCount, startRow, startCol) {
   let mines = 0;
   while (mines < mineCount) {
     let x = Math.floor(Math.random() * columns);
     let y = Math.floor(Math.random() * rows);
-    if (map[y][x] !== mine) {
+    if (x !== startCol && y !== startRow && map[y][x] !== mine) {
       map[y][x] = mine;
       mines++;
     }
