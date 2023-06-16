@@ -54,7 +54,7 @@ canvas.addEventListener('click', function(event) {
   }
   exploreField(row, col);
   drawMap();
-  if (map[row][col] === mine) {
+  if (map[row][col] === mine && exploredMap[row][col]) {
     looseGame();
     stopTimer();
   } else if (exploredFields === rows * columns - mineCount) {
@@ -121,7 +121,7 @@ function looseGame() {
 }
 
 function exploreField(row, col) {
-  if (exploredMap[row][col] === false) {
+  if (!exploredMap[row][col] && !flagMap[row][col]) {
     exploredFields++;
     exploredMap[row][col] = true;
     if (map[row][col] === 0) {
